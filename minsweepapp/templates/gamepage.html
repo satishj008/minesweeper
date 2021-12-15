@@ -1,0 +1,40 @@
+{% load customtag %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Show Mine</title>
+</head>
+<body>
+
+    <h1>Array</h1>
+    <table border="1">
+        {%for i in display_data%}
+        
+        <tr>
+            {%for j in i%}
+            {%if j%}
+            <td bgcolor="{{hidden_data | clicked:(1,2) }}">
+            {%else%}
+            <td>
+            {%endif%}
+                <form action="playgame" method="POST" >
+                {%csrf_token%}
+                <input type="hidden" name="key" value="{{forloop.parentloop.counter0}}&nbsp;{{forloop.counter0}}">
+                {%if j%} 
+                <input type="submit" value="{{j}}">
+                {%else%}
+                <input type="submit" value="">
+                {%endif%}
+            </form>
+            </td>
+            {%endfor%}
+        </tr>
+        {%endfor%}
+        
+    </table>
+    
+</body>
+</html>

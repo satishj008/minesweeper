@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Show Mine</title>
+</head>
+<body>
+<form action="placebomb" method="POST">
+    {%csrf_token%}
+    <h1>placebomb</h1>
+    <table border="1">
+        {%for i in row%}
+
+        <tr>
+            {%for j in col%}
+            <td>{{i}} {{j}}<input type="checkbox" name="{{i}} {{j}}" id="" value="flag"></td>
+            {%endfor%}
+        </tr>
+        {%endfor%}
+
+        <tr><td><input type="submit" value="submit"></td></tr>
+
+        
+    </table>
+</form>
+    
+</body>
+</html>

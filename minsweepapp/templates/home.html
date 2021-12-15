@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>MineSweeper</title>
+</head>
+<body>
+    <h1>Mine Sweeper</h1>
+    <form action="" method="POST">
+        {%csrf_token%}
+
+        <table>
+            <thead>Please Enter Matrix Size</thead>
+            <tr>
+                <td>row </td>
+                <td><input type="number" name="row" id=""> </td>
+            </tr>
+
+            <tr>
+                <td>Col</td>
+                <td><input type="number" name="col" id=""></td>
+            </tr>
+            <tr>
+                <td> <input type="submit" value="Submit"> <br></td>
+            </tr>
+        </table>
+    
+
+    </form>
+</body>
+</html>
