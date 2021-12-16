@@ -3,8 +3,13 @@ register = template.Library()
 
 
 @register.filter(name="clicked")
+def clicked(value):
+    if value==1:
+        return "blue"
+    else:
+        return ""
 
-def clicked(value,**args):
-    print("from filter",value)
-    print(args)
-    return "blue"
+
+@register.filter
+def index(indexable, i):
+    return indexable[i]

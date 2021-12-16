@@ -9,17 +9,13 @@
 </head>
 <body>
 
-    <h1>Array</h1>
+    <h1>MineSweer</h1>
     <table border="1">
         {%for i in display_data%}
         
         <tr>
             {%for j in i%}
-            {%if j%}
-            <td bgcolor="{{hidden_data | clicked:(1,2) }}">
-            {%else%}
-            <td>
-            {%endif%}
+            <td bgcolor="{{hidden_data|index:forloop.parentloop.counter0|index:forloop.counter0|clicked}}">
                 <form action="playgame" method="POST" >
                 {%csrf_token%}
                 <input type="hidden" name="key" value="{{forloop.parentloop.counter0}}&nbsp;{{forloop.counter0}}">

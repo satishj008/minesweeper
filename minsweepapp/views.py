@@ -1,7 +1,7 @@
 from django.shortcuts import render,HttpResponse ,redirect
 import numpy as np
 
-
+hidden_data=np.empty((1,1))
 
 def gethidden(data,x,y,hidden_data,a=[]):
     if data[x][y]!=0:
@@ -76,7 +76,7 @@ def placebomb(request):
         print(hidden_data)
         display_data=np.multiply(data,hidden_data)
         # print(display_data)
-        return render(request,"gamepage.html",{"display_data":display_data,"row":range(data.shape[0]),"col":range(data.shape[1])})
+        return render(request,"gamepage.html",{"display_data":display_data,"hidden_data":hidden_data,"row":range(data.shape[0]),"col":range(data.shape[1])})
 
 
 def playgame(request):
@@ -92,13 +92,8 @@ def playgame(request):
 
         return render(request,"gamepage.html",{"display_data":display_data,"hidden_data":hidden_data,"row":range(data.shape[0]),"col":range(data.shape[1])})
     else:
-        # print(hidden_data)
         return redirect("/")
 
-
-
-
-# Create your views here.
 
 
 
