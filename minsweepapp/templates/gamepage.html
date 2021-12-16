@@ -20,7 +20,7 @@
                 {%csrf_token%}
                 <input type="hidden" name="key" value="{{forloop.parentloop.counter0}}&nbsp;{{forloop.counter0}}">
                 {%if j%} 
-                <input type="submit" value="{{j}}">
+                <input type="submit" value="{{j|flagshow}}"style="color:{{j|customcolor}}">
                 {%else%}
                 <input type="submit" value="">
                 {%endif%}
@@ -31,6 +31,9 @@
         {%endfor%}
         
     </table>
+
+    <br>
+    <a href="/">home</a>
     
 </body>
 </html>

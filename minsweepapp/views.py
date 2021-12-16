@@ -1,7 +1,6 @@
 from django.shortcuts import render,HttpResponse ,redirect
 import numpy as np
 
-hidden_data=np.empty((1,1))
 
 def gethidden(data,x,y,hidden_data,a=[]):
     if data[x][y]!=0:
@@ -24,11 +23,11 @@ def gethidden(data,x,y,hidden_data,a=[]):
     return hidden_data  
 
 
-def create_array(row,col):
-    global data
-    global hidden_data
+def create_array(request,row,col):
     data=np.zeros((row,col),dtype="int")
     hidden_data=np.zeros((row,col),dtype="int")
+    request.session["data"]=data.tolist()
+    request.session["hidden_data"]=hidden_data.tolist()
     return data 
 
 
@@ -44,7 +43,9 @@ def adjcent_flag_count(matrix, position):
                     count+=1
     return count
 
-def generate_minespace():
+
+
+def generate_minespace(data):
     for i in range(0, data.shape[0]):
         for j in range(0, data.shape[1]):
             if data[i][j]!=10:
@@ -56,40 +57,33 @@ def home(request):
     if request.method=="POST":
         row = int(request.POST.get("row"))
         col = int(request.POST.get("col"))
-        array=create_array(row,col)
+        data=create_array(request,row,col)
         return render(request,"placebomb.html",{"row":range(row),"col":range(col)})
-        return render(request,"placebomb.html",{"array":array})
-        return render(request,"showmine.html",{"array":array})
     else:
         return render(request,"home.html")
 
 
 def placebomb(request):
-    global data
+    data=np.array(request.session["data"])
+    hidden_data=np.array(request.session["hidden_data"])
     if request.method=="POST":
         for i in  list(request.POST.keys())[1:]:
-            print(i)
             x,y= map(int,i.split(" "))
             data[x][y]=10
-        generate_minespace()
-        print(data)
-        print(hidden_data)
+        generate_minespace(data)
+        request.session["data"]=data.tolist()
         display_data=np.multiply(data,hidden_data)
-        # print(display_data)
         return render(request,"gamepage.html",{"display_data":display_data,"hidden_data":hidden_data,"row":range(data.shape[0]),"col":range(data.shape[1])})
 
 
 def playgame(request):
-    global data
-    global hidden_data
+    data=np.array(request.session["data"])
+    hidden_data=np.array(request.session["hidden_data"])
     if request.method == "POST":
-        print(request.POST.get("key"))
         i,j=map(int,request.POST.get("key").split("\xa0"))
-        print(i,j)
         hidden_data = gethidden(data,i,j,hidden_data,a=[])
-        print(hidden_data)
+        request.session["hidden_data"]=hidden_data.tolist()
         display_data=np.multiply(data,hidden_data)
-
         return render(request,"gamepage.html",{"display_data":display_data,"hidden_data":hidden_data,"row":range(data.shape[0]),"col":range(data.shape[1])})
     else:
         return redirect("/")
