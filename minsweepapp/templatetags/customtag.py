@@ -5,7 +5,7 @@ register = template.Library()
 @register.filter(name="clicked")
 def clicked(value):
     if value==1:
-        return "blue"
+        return "#A18FA2"
     else:
         return ""
 
@@ -18,14 +18,31 @@ def index(indexable, i):
 @register.filter(name="flagshow")
 def flagshow(value):
     if value==10:
-        return "B"
+        return "fa fa-bomb"
     else:
         return value
+
+
+@register.filter(name="show")
+def show(value):
+    if value==10:
+        return ""
+    else:
+        return value
+
 
 
 @register.filter(name="customcolor")
 def customcolor(value):
     if value==10:
         return "red"
+    elif value==1:
+        return "blue"
+    elif value==2:
+        return "green"
+    elif value==3:
+        return "red"
     else:
-        return ""
+        return value
+
+

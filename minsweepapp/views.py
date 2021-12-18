@@ -63,6 +63,24 @@ def home(request):
         return render(request,"home.html")
 
 
+
+
+def placebomb_random(request):
+    row = int(request.POST.get("row"))
+    col = int(request.POST.get("col"))
+    data=create_array(request,row,col)
+    data=np.random.choice([0,0,0,0,10],(row,col))
+    hidden_data=np.array(request.session["hidden_data"])
+    print(data.size)
+    generate_minespace(data)
+    winning_matrix=np.where(data==10,0,data)
+    request.session["winning_matrix"]=winning_matrix.tolist()
+    request.session["data"]=data.tolist()
+    display_data=np.multiply(data,hidden_data)
+    return render(request,"gamepage.html",{"display_data":display_data,"hidden_data":hidden_data,"row":range(data.shape[0]),"col":range(data.shape[1])})
+    
+
+
 def placebomb(request):
     data=np.array(request.session["data"])
     hidden_data=np.array(request.session["hidden_data"])
@@ -71,6 +89,8 @@ def placebomb(request):
             x,y= map(int,i.split(" "))
             data[x][y]=10
         generate_minespace(data)
+        winning_matrix=np.where(data==10,0,data)
+        request.session["winning_matrix"]=winning_matrix.tolist()
         request.session["data"]=data.tolist()
         display_data=np.multiply(data,hidden_data)
         return render(request,"gamepage.html",{"display_data":display_data,"hidden_data":hidden_data,"row":range(data.shape[0]),"col":range(data.shape[1])})
@@ -79,12 +99,22 @@ def placebomb(request):
 def playgame(request):
     data=np.array(request.session["data"])
     hidden_data=np.array(request.session["hidden_data"])
+    winning_matrix=np.array(request.session["winning_matrix"])
     if request.method == "POST":
-        i,j=map(int,request.POST.get("key").split("\xa0"))
-        hidden_data = gethidden(data,i,j,hidden_data,a=[])
+        try:
+            i,j=map(int,request.POST.get("key").split("\xa0"))
+        except:
+            print("no key")
+        else:
+            hidden_data = gethidden(data,i,j,hidden_data,a=[])   
         request.session["hidden_data"]=hidden_data.tolist()
         display_data=np.multiply(data,hidden_data)
-        return render(request,"gamepage.html",{"display_data":display_data,"hidden_data":hidden_data,"row":range(data.shape[0]),"col":range(data.shape[1])})
+        if (display_data==winning_matrix).all():
+            return render(request,"gamepage.html",{"display_data":display_data,"hidden_data":hidden_data,"row":range(data.shape[0]),"col":range(data.shape[1]),"message":"You Win!"})
+        elif (display_data==data).all():
+            return render(request,"gamepage.html",{"display_data":display_data,"hidden_data":hidden_data,"row":range(data.shape[0]),"col":range(data.shape[1]),"message":"Game Over!"})
+        else:
+            return render(request,"gamepage.html",{"display_data":display_data,"hidden_data":hidden_data,"row":range(data.shape[0]),"col":range(data.shape[1])})
     else:
         return redirect("/")
 

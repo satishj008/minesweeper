@@ -20,5 +20,6 @@ from .views import *
 urlpatterns = [
     path("", home,name="home"),
     path("placebomb", placebomb,name="placebomb"),
-    path("playgame",playgame,name="playgame")
+    path("playgame",playgame,name="playgame"),
+    path("placebombrandom",placebomb_random,name="placebombrandom"),
 ]
